@@ -1,14 +1,14 @@
-import { pgTable, serial, text, varchar, timestamp } from "drizzle-orm/pg-core"
+import { pgTable, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
 
 // Dictionary words table
 export const words = pgTable("words", {
   id: serial("id").primaryKey(),
   value: varchar("value", { length: 255 }).notNull(),
-  script: varchar("script", { length: 10 }).notNull().default("latin"),
-  flags: varchar("flags", { length: 50 }),
+  script: varchar("script", { length: 20 }).notNull().default("latin"),
+  flags: varchar("flags", { length: 26 }),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-})
+});
 
 // Prefixes table
 export const prefixes = pgTable("prefixes", {
@@ -17,7 +17,7 @@ export const prefixes = pgTable("prefixes", {
   script: varchar("script", { length: 10 }).notNull().default("latin"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-})
+});
 
 // Suffixes table
 export const suffixes = pgTable("suffixes", {
@@ -26,7 +26,7 @@ export const suffixes = pgTable("suffixes", {
   script: varchar("script", { length: 10 }).notNull().default("latin"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-})
+});
 
 // Dictionary settings table
 export const settings = pgTable("settings", {
@@ -35,5 +35,4 @@ export const settings = pgTable("settings", {
   value: text("value"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-})
-
+});

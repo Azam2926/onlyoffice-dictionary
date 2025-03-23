@@ -1,52 +1,61 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { Edit, Trash2, Loader2 } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
+import { useState, useEffect } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Edit, Trash2, Loader2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface WordsTableProps {
-  type: "word" | "prefix" | "suffix"
+  type: "word" | "prefix" | "suffix";
 }
 
 interface WordEntry {
-  id: string
-  value: string
-  script: "latin" | "cyrillic"
-  flags?: string
-  createdAt: string
+  id: string;
+  value: string;
+  script: "latin" | "cyrillic";
+  flags?: string;
+  createdAt: string;
 }
 
 export default function WordsTable({ type }: WordsTableProps) {
-  const [entries, setEntries] = useState<WordEntry[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [entries, setEntries] = useState<WordEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchEntries = async () => {
       try {
-        setLoading(true)
+        setLoading(true);
         // In a real app, this would fetch from your API
-        const response = await fetch(`/api/dictionary-entries?type=${type}`)
+        const response = await fetch(`/api/dictionary-entries?type=${type}`);
 
         if (!response.ok) {
-          throw new Error(`Failed to fetch ${type} entries`)
+          throw new Error(`Failed to fetch ${type} entries`);
         }
 
-        const data = await response.json()
-        setEntries(data.entries)
-        setError(null)
+        const data = await response.json();
+        setEntries(data.entries);
+        setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "An unknown error occurred")
-        setEntries([])
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred",
+        );
+        setEntries([]);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchEntries()
-  }, [type])
+    fetchEntries();
+  }, [type]);
   //
   // // Mock data for demonstration
   // useEffect(() => {
@@ -78,35 +87,37 @@ export default function WordsTable({ type }: WordsTableProps) {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-60">
+      <div className="flex h-60 items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
         <span className="ml-2">Loading entries...</span>
       </div>
-    )
+    );
   }
 
   if (error) {
     return (
-      <div className="p-4 border border-red-200 bg-red-50 text-red-700 rounded-md">
+      <div className="rounded-md border border-red-200 bg-red-50 p-4 text-red-700">
         <p>Error: {error}</p>
       </div>
-    )
+    );
   }
 
   if (entries.length === 0) {
     return (
-      <div className="text-center p-8 border rounded-md">
+      <div className="rounded-md border p-8 text-center">
         <p className="text-muted-foreground">No {type} entries found.</p>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="border rounded-md">
+    <div className="rounded-md border">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>{type.charAt(0).toUpperCase() + type.slice(1)}</TableHead>
+            <TableHead>
+              {type.charAt(0).toUpperCase() + type.slice(1)}
+            </TableHead>
             <TableHead>Script</TableHead>
             {type === "word" && <TableHead>Flags</TableHead>}
             <TableHead>Added</TableHead>
@@ -118,10 +129,16 @@ export default function WordsTable({ type }: WordsTableProps) {
             <TableRow key={entry.id}>
               <TableCell className="font-medium">{entry.value}</TableCell>
               <TableCell>
-                <Badge variant={entry.script === "latin" ? "default" : "secondary"}>{entry.script}</Badge>
+                <Badge
+                  variant={entry.script === "latin" ? "default" : "secondary"}
+                >
+                  {entry.script}
+                </Badge>
               </TableCell>
               {type === "word" && <TableCell>{entry.flags || "-"}</TableCell>}
-              <TableCell>{entry.createdAt}</TableCell>
+              <TableCell>
+                {new Date(entry.createdAt).toLocaleString()}
+              </TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
                   <Button variant="ghost" size="icon">
@@ -137,6 +154,5 @@ export default function WordsTable({ type }: WordsTableProps) {
         </TableBody>
       </Table>
     </div>
-  )
+  );
 }
-
