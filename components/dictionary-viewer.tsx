@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Loader2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -19,29 +19,31 @@ export default function DictionaryViewer({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // useEffect(() => {
-  //   const fetchDictionaryFile = async () => {
-  //     try {
-  //       setLoading(true)
-  //       const response = await fetch(`/api/dictionaries/${language}/${type}`)
-  //
-  //       if (!response.ok) {
-  //         throw new Error(`Failed to fetch ${language}.${type} file`)
-  //       }
-  //
-  //       const data = await response.json()
-  //       setContent(data.content)
-  //       setError(null)
-  //     } catch (err) {
-  //       setError(err instanceof Error ? err.message : "An unknown error occurred")
-  //       setContent([])
-  //     } finally {
-  //       setLoading(false)
-  //     }
-  //   }
-  //
-  //   fetchDictionaryFile()
-  // }, [type, language])
+  useEffect(() => {
+    const fetchDictionaryFile = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/dictionaries/${language}/${type}`);
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch ${language}.${type} file`);
+        }
+
+        const data = await response.json();
+        setContent(data.content);
+        setError(null);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred",
+        );
+        setContent([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDictionaryFile();
+  }, [type, language]);
 
   const [isPending, startTransition] = useTransition();
   const [syncResult, setSyncResult] = useState<{
@@ -81,8 +83,8 @@ export default function DictionaryViewer({
   return (
     <div className="space-y-4">
       <div>
-        <h1>Sync .dic File to Database</h1>
-        <Button disabled={isPending} onClick={handleSync}>
+        <h1>Sync File to Database</h1>
+        <Button disabled={true} onClick={handleSync}>
           {isPending ? "Syncing..." : "Sync Dictionary"}
         </Button>
 

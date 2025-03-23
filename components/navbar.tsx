@@ -1,7 +1,7 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { ModeToggle } from "@/components/mode-toggle"
-import { Home, Database, FileText, Settings } from "lucide-react"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { ModeToggle } from "@/components/mode-toggle";
+import { Home, Database, FileText, Settings } from "lucide-react";
 
 export default function Navbar() {
   return (
@@ -12,7 +12,7 @@ export default function Navbar() {
             <Database className="h-5 w-5" />
             <span>Dictionary Manager</span>
           </Link>
-          <nav className="hidden md:flex gap-6">
+          <nav className="hidden gap-6 md:flex">
             <Link
               href="/"
               className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground"
@@ -34,13 +34,6 @@ export default function Navbar() {
               <Database className="h-4 w-4" />
               Words
             </Link>
-            <Link
-              href="/settings"
-              className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground"
-            >
-              <Settings className="h-4 w-4" />
-              Settings
-            </Link>
           </nav>
         </div>
         <div className="flex items-center gap-4">
@@ -51,6 +44,5 @@ export default function Navbar() {
         </div>
       </div>
     </header>
-  )
+  );
 }
-
